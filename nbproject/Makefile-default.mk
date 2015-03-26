@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=adc.c lcd.c newmain.c pwm.c timer.c
+SOURCEFILES_QUOTED_IF_SPACED=adc.c lcd.c pwm.c timer.c motormain.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/adc.o ${OBJECTDIR}/lcd.o ${OBJECTDIR}/newmain.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/adc.o.d ${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/newmain.o.d ${OBJECTDIR}/pwm.o.d ${OBJECTDIR}/timer.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/adc.o ${OBJECTDIR}/lcd.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/motormain.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/adc.o.d ${OBJECTDIR}/lcd.o.d ${OBJECTDIR}/pwm.o.d ${OBJECTDIR}/timer.o.d ${OBJECTDIR}/motormain.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/adc.o ${OBJECTDIR}/lcd.o ${OBJECTDIR}/newmain.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o
+OBJECTFILES=${OBJECTDIR}/adc.o ${OBJECTDIR}/lcd.o ${OBJECTDIR}/pwm.o ${OBJECTDIR}/timer.o ${OBJECTDIR}/motormain.o
 
 # Source Files
-SOURCEFILES=adc.c lcd.c newmain.c pwm.c timer.c
+SOURCEFILES=adc.c lcd.c pwm.c timer.c motormain.c
 
 
 CFLAGS=
@@ -96,13 +96,6 @@ ${OBJECTDIR}/lcd.o: lcd.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE)  lcd.c  -o ${OBJECTDIR}/lcd.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/lcd.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/lcd.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/newmain.o: newmain.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/newmain.o.d 
-	@${RM} ${OBJECTDIR}/newmain.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  newmain.c  -o ${OBJECTDIR}/newmain.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/newmain.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/newmain.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
 ${OBJECTDIR}/pwm.o: pwm.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/pwm.o.d 
@@ -116,6 +109,13 @@ ${OBJECTDIR}/timer.o: timer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/timer.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  timer.c  -o ${OBJECTDIR}/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/timer.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/timer.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/motormain.o: motormain.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/motormain.o.d 
+	@${RM} ${OBJECTDIR}/motormain.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  motormain.c  -o ${OBJECTDIR}/motormain.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/motormain.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/motormain.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 else
 ${OBJECTDIR}/adc.o: adc.c  nbproject/Makefile-${CND_CONF}.mk
@@ -132,13 +132,6 @@ ${OBJECTDIR}/lcd.o: lcd.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE)  lcd.c  -o ${OBJECTDIR}/lcd.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/lcd.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/lcd.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
-${OBJECTDIR}/newmain.o: newmain.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/newmain.o.d 
-	@${RM} ${OBJECTDIR}/newmain.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  newmain.c  -o ${OBJECTDIR}/newmain.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/newmain.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
-	@${FIXDEPS} "${OBJECTDIR}/newmain.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
-	
 ${OBJECTDIR}/pwm.o: pwm.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/pwm.o.d 
@@ -152,6 +145,13 @@ ${OBJECTDIR}/timer.o: timer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${RM} ${OBJECTDIR}/timer.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  timer.c  -o ${OBJECTDIR}/timer.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/timer.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
 	@${FIXDEPS} "${OBJECTDIR}/timer.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
+	
+${OBJECTDIR}/motormain.o: motormain.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/motormain.o.d 
+	@${RM} ${OBJECTDIR}/motormain.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  motormain.c  -o ${OBJECTDIR}/motormain.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MMD -MF "${OBJECTDIR}/motormain.o.d"        -g -omf=elf -O0 -msmart-io=1 -Wall -msfr-warn=off
+	@${FIXDEPS} "${OBJECTDIR}/motormain.o.d" $(SILENT)  -rsi ${MP_CC_DIR}../ 
 	
 endif
 

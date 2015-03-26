@@ -19,6 +19,12 @@ _CONFIG2( IESO_OFF & SOSCSEL_SOSC & WUTSEL_LEG & FNOSC_PRIPLL & FCKSM_CSDCMD & O
     IOL1WAY_OFF & I2C1SEL_PRI & POSCMOD_XT )
 // ******************************************************************************************* //
 // ******************************************************************************************* //
+typedef enum stateTypeEnum{
+    forward, idle1, backward, idle2, waitswitch
+} stateType;
+
+volatile stateType curState = forward;
+volatile stateType nextState;
 
 volatile int val = 0;
 volatile int done = 0;
@@ -26,7 +32,7 @@ volatile int adcVal = 0;
 
 int main(void)
 {
-    char str[9];
+    //char str[9];
     
     initLCD();
     initPWM();
@@ -34,20 +40,49 @@ int main(void)
     TRISBbits.TRISB11 = 0;
     LATBbits.LATB11 = 1;
     
-    while(1)
-    {
-        
-        if(done){
+    while(1){
+        switch(curState){
+            case forward:
+                //Change direction here
+                nextState = idle1;
+                curState = waitswitch;
+                break;
+            case idle1:
+                //Do nothing State
+                break;
+            case backward:
+                //Change direct here
+                break;
+            case idle2:
+                //Do nothing State
+                break;
+            case waitswitch:
+                if(adcVal > 500){
+                    //Turned all the way CW
+                    //Keep right wheel  on while
+                    //lowering the speed of left wheel
+                }
+                else{
+                    //Turned all the way CCW
+                    //Keep left wheel on while
+                    //Lowering the speed of right wheel
+                }
+                break;
+            default:
+                curState = forward;
+                break;
+        }
+    }
+    /*
+     if(done){
             clearLCD();
             sprintf(str, "%d", adcVal);
             printStringLCD(str);
             OC1RS = adcVal;
             done = 0;
         }
-         RPOR1bits.RP3R = 18;
-        
-       
-    }
+
+        */
     return 0;
 }
 // ******************************************************************************************* //
@@ -64,3 +99,7 @@ void _ISR _ADC1Interrupt(void){
     done = 1;
 }
 // ******************************************************************************************* //
+void _ISR _CNInterrupt(void){
+    IFS1bits.CNIF = 0;
+   
+}

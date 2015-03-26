@@ -5,15 +5,23 @@ void initPWM(){
 
     T3CONbits.TCKPS = 1;
     TMR3 = 0;
-    PR3 = 1023; //1 milisecond
+    PR3 = 1000; //Timing is not important?
     
 
     OC1CONbits.OCTSEL = 1; //Using Timer 3
-    OC1CONbits.OCM = 6; //PWM mode on OCx,
-  //  RPOR1bits.RP2R = 18; //Pin 6 is maped to OC1
+    OC2CONbits.OCTSEL = 1;
 
+    OC1CONbits.OCM = 6; //PWM mode on OCx,Fault pin disabled
+    OC2CONbits.OCM = 6;
+    
+    RPOR1bits.RP2R = 18; //Pin 6 is maped to OC1 control left wheel
+    //TODO: add another pin to control right wheel
+    
     OC1R = 0;
-    OC1RS = 1007;
+    OC2R = 0;
+    
+    OC1RS = 0; //Start off zero duty cycle
+    OC2RS = 0;
 
     T3CONbits.TON = 1;
 }
