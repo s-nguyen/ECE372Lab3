@@ -15,7 +15,7 @@ void initPWM(){
     OC2CONbits.OCM = 6;
     
     RPOR1bits.RP2R = 18; //Pin 6 is maped to OC1 control left wheel
-    //TODO: add another pin to control right wheel
+    RPOR0bits.RP0R = 19; //Pin 4 is mapped to OC2 Control Right wheel
     
     OC1R = 0;
     OC2R = 0;

@@ -8,6 +8,7 @@
 #include "p24fj64ga002.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "adc.h"
 #include "pwm.h"
 #include "timer.h"
@@ -23,7 +24,7 @@ typedef enum stateTypeEnum{
     forward, idle1, backward, idle2, waitswitch
 } stateType;
 
-volatile stateType curState = forward;
+volatile stateType curState = idle2;
 volatile stateType nextState;
 
 volatile int val = 0;
@@ -37,36 +38,69 @@ int main(void)
     initLCD();
     initPWM();
     initADC();
+    //Enable ON the H-bridge
     TRISBbits.TRISB11 = 0;
     LATBbits.LATB11 = 1;
+
+
+
+    TRISBbits.TRISB5 = 1;
+    IFS1bits.CNIF = 0;
+    IEC1bits.CNIE = 1;
+    CNEN2bits.CN27IE = 1;
+
     
     while(1){
         switch(curState){
-            case forward:
+            case backward:
                 //Change direction here
-                nextState = idle1;
+                RPOR0bits.RP1R = 0;
+                RPOR1bits.RP3R = 0;
+                RPOR1bits.RP2R = 18; //Pin 6 is maped to OC1 control left wheel
+                RPOR0bits.RP0R = 19; //Pin 4 is mapped to OC2 Control Right wheel
+                nextState = idle2;
                 curState = waitswitch;
                 break;
             case idle1:
                 //Do nothing State
+                OC1RS = 0;
+                OC2RS = 0;
+                nextState = backward;
+               // curState = waitswitch;
                 break;
-            case backward:
+            case forward :
                 //Change direct here
+                RPOR1bits.RP2R = 0;
+                RPOR0bits.RP0R = 0;
+                RPOR0bits.RP1R = 19;
+                RPOR1bits.RP3R = 18;
+                nextState = idle1;
+                curState = waitswitch;
                 break;
             case idle2:
                 //Do nothing State
+                OC1RS = 0;
+                OC2RS = 0;
+               // curState = waitswitch;
+                nextState = forward;
+                
                 break;
             case waitswitch:
-                if(adcVal > 500){
+                if(adcVal >= 500){
                     //Turned all the way CW
                     //Keep right wheel  on while
                     //lowering the speed of left wheel
+                    OC2RS = abs((1000-adcVal)*2);
+                    OC1RS = 1000;
+
                 }
                 else{
                     //Turned all the way CCW
                     //Keep left wheel on while
                     //Lowering the speed of right wheel
-                }
+                    OC2RS = 1000;
+                    OC1RS = abs(adcVal*2);
+                 }
                 break;
             default:
                 curState = forward;
@@ -101,5 +135,12 @@ void _ISR _ADC1Interrupt(void){
 // ******************************************************************************************* //
 void _ISR _CNInterrupt(void){
     IFS1bits.CNIF = 0;
-   
+    if(PORTBbits.RB5 == 0){
+      
+    }
+    else if(PORTBbits.RB5 == 1){
+        
+        curState = nextState;
+    }
+
 }
