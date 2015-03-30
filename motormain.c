@@ -27,13 +27,13 @@ typedef enum stateTypeEnum{
 volatile stateType curState = idle2;
 volatile stateType nextState;
 
-volatile int val = 0;
 volatile int done = 0;
 volatile int adcVal = 0;
 
 int main(void)
 {
     char str[9];
+    double voltage;
     
     initLCD();
     initPWM();
@@ -49,8 +49,14 @@ int main(void)
     IEC1bits.CNIE = 1;
     CNEN2bits.CN27IE = 1;
 
-    
     while(1){
+        if(done){
+            moveCursorLCD(0,0);
+            voltage = (3.3/1023)*adcVal;
+            sprintf(str, "%1.5fV", voltage);
+            printStringLCD(str);
+            done = 0;
+        }
         switch(curState){
             case backward:
                 //Change direction here
@@ -66,7 +72,6 @@ int main(void)
                 OC1RS = 0;
                 OC2RS = 0;
                 nextState = backward;
-               // curState = waitswitch;
                 break;
             case forward :
                 //Change direct here
@@ -81,26 +86,28 @@ int main(void)
                 //Do nothing State
                 OC1RS = 0;
                 OC2RS = 0;
-               // curState = waitswitch;
                 nextState = forward;
-                
                 break;
             case waitswitch:
-                if(adcVal >= 500){
+                if(adcVal > 511){
                     //Turned all the way CW
                     //Keep right wheel  on while
                     //lowering the speed of left wheel
-                    OC2RS = abs((1000-adcVal)*2);
-                    OC1RS = 1000;
+                    OC2RS = abs((1023-adcVal)*2);
+                    OC1RS = 1023;
 
                 }
-                else{
+                else if(adcVal < 500){
                     //Turned all the way CCW
                     //Keep left wheel on while
                     //Lowering the speed of right wheel
-                    OC2RS = 1000;
+                    OC2RS = 1023;
                     OC1RS = abs(adcVal*2);
                  }
+                else{
+                    OC1RS = 1023;
+                    OC2RS = 1023;
+                }
                 break;
             default:
                 curState = forward;
@@ -108,20 +115,17 @@ int main(void)
         }
     }
     
-     if(done){
-            clearLCD();
-            sprintf(str, "%d", adcVal);
-            printStringLCD(str);
-            OC1RS = adcVal;
-            done = 0;
-        }
+     
 
         
     return 0;
 }
 // ******************************************************************************************* //
 void _ISR _ADC1Interrupt(void){
+
     IFS0bits.AD1IF = 0;
+    adcVal = ADC1BUF0;
+    /*
     int i = 0;
     unsigned int *adcPtr;
     adcVal = 0;
@@ -130,6 +134,8 @@ void _ISR _ADC1Interrupt(void){
         adcVal = adcVal + *adcPtr/16;
         adcPtr++;
     }
+     */
+    
     done = 1;
 }
 // ******************************************************************************************* //
