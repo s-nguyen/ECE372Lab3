@@ -33,7 +33,7 @@ volatile int adcVal = 0;
 
 int main(void)
 {
-    //char str[9];
+    char str[9];
     
     initLCD();
     initPWM();
@@ -43,7 +43,7 @@ int main(void)
     LATBbits.LATB11 = 1;
 
 
-
+    //init a button?
     TRISBbits.TRISB5 = 1;
     IFS1bits.CNIF = 0;
     IEC1bits.CNIE = 1;
@@ -107,7 +107,7 @@ int main(void)
                 break;
         }
     }
-    /*
+    
      if(done){
             clearLCD();
             sprintf(str, "%d", adcVal);
@@ -116,7 +116,7 @@ int main(void)
             done = 0;
         }
 
-        */
+        
     return 0;
 }
 // ******************************************************************************************* //

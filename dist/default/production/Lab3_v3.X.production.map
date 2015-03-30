@@ -336,22 +336,22 @@ __CONFIG1         0x00abfe          0x2
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x2dcd
+.debug_info       0x000000       0x2df0
  *(.debug_info)
  .debug_info      0x000000        0xaca build/default/production/adc.o
  .debug_info      0x000aca        0x5b4 build/default/production/lcd.o
  .debug_info      0x00107e        0x74a build/default/production/pwm.o
  .debug_info      0x0017c8        0x713 build/default/production/timer.o
- .debug_info      0x001edb        0xef2 build/default/production/motormain.o
+ .debug_info      0x001edb        0xf15 build/default/production/motormain.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000        0x577
+.debug_abbrev     0x000000        0x58b
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0xf8 build/default/production/adc.o
  .debug_abbrev    0x0000f8         0xf7 build/default/production/lcd.o
  .debug_abbrev    0x0001ef         0xb6 build/default/production/pwm.o
  .debug_abbrev    0x0002a5        0x136 build/default/production/timer.o
- .debug_abbrev    0x0003db        0x19c build/default/production/motormain.o
+ .debug_abbrev    0x0003db        0x1b0 build/default/production/motormain.o
 
 .debug_line       0x000000        0xa1e
  *(.debug_line)
