@@ -81,4 +81,10 @@ void initTimer1(){
     T1CONbits.TON = 1;
 }
 
-
+void initSW(){
+    //init a button?
+    TRISBbits.TRISB5 = 1;
+    IFS1bits.CNIF = 0;
+    IEC1bits.CNIE = 1;
+    CNEN2bits.CN27IE = 1;
+}

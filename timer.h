@@ -13,7 +13,7 @@ void delay5ms();
 void delayS(int s);
 void getTimedString(int watch, char* str);
 void initTimer1();
-
+void initSW();
 
 
 

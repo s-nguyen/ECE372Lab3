@@ -1,6 +1,7 @@
 #include "p24FJ64GA002.h"
 #include "pwm.h"
 
+
 void initPWM(){
 
     T3CONbits.TCKPS = 1;
@@ -14,8 +15,8 @@ void initPWM(){
     OC1CONbits.OCM = 6; //PWM mode on OCx,Fault pin disabled
     OC2CONbits.OCM = 6;
     
-    RPOR1bits.RP2R = 18; //Pin 6 is maped to OC1 control left wheel
-    RPOR0bits.RP0R = 19; //Pin 4 is mapped to OC2 Control Right wheel
+    PIN6 = 18; //Pin 6 is maped to OC1 control left wheel
+    PIN4 = 19; //Pin 4 is mapped to OC2 Control Right wheel
     
     OC1R = 0;
     OC2R = 0;
@@ -23,5 +24,5 @@ void initPWM(){
     OC1RS = 0; //Start off zero duty cycle
     OC2RS = 0;
 
-    T3CONbits.TON = 1;
+    T3CONbits.TON = 1; //Turn timer 3 on at the end
 }

@@ -32,60 +32,54 @@ volatile int adcVal = 0;
 
 int main(void)
 {
-    char str[9];
+    char str[9]; //Used to print to LCD
     double voltage;
     
     initLCD();
     initPWM();
     initADC();
+    initSW();
     //Enable ON the H-bridge
-    TRISBbits.TRISB11 = 0;
-    LATBbits.LATB11 = 1;
-
-
-    //init a button?
-    TRISBbits.TRISB5 = 1;
-    IFS1bits.CNIF = 0;
-    IEC1bits.CNIE = 1;
-    CNEN2bits.CN27IE = 1;
+    ENABLEPIN = OUTPUT;
+    ENABLE = 1;
 
     while(1){
         if(done){
             moveCursorLCD(0,0);
-            voltage = (3.3/1023)*adcVal;
-            sprintf(str, "%1.5fV", voltage);
+            voltage = (3.3/1023)*adcVal; //Scale 3.3 Volts with ADC
+            sprintf(str, "%1.5fV", voltage); //print voltage read from ADC to a string
             printStringLCD(str);
             done = 0;
         }
         switch(curState){
             case backward:
                 //Change direction here
-                RPOR0bits.RP1R = 0;
-                RPOR1bits.RP3R = 0;
-                RPOR1bits.RP2R = 18; //Pin 6 is maped to OC1 control left wheel
-                RPOR0bits.RP0R = 19; //Pin 4 is mapped to OC2 Control Right wheel
+                PIN5 = 0; //0 for NULL not used
+                PIN6 = 0;
+                PIN6 = 18; //Pin 6 is maped to OC1 control left wheel
+                PIN4 = 19; //Pin 4 is mapped to OC2 Control Right wheel
                 nextState = idle2;
                 curState = waitswitch;
                 break;
             case idle1:
                 //Do nothing State
-                OC1RS = 0;
-                OC2RS = 0;
+                LEFTWHEEL = 0;
+                RIGHTWHEEL = 0;
                 nextState = backward;
                 break;
             case forward :
                 //Change direct here
-                RPOR1bits.RP2R = 0;
-                RPOR0bits.RP0R = 0;
-                RPOR0bits.RP1R = 19;
-                RPOR1bits.RP3R = 18;
+                PIN6 = 0;
+                PIN4 = 0;
+                PIN5 = 19;
+                PIN7 = 18;
                 nextState = idle1;
                 curState = waitswitch;
                 break;
             case idle2:
                 //Do nothing State
-                OC1RS = 0;
-                OC2RS = 0;
+                LEFTWHEEL = 0;
+                RIGHTWHEEL = 0;
                 nextState = forward;
                 break;
             case waitswitch:
@@ -93,20 +87,20 @@ int main(void)
                     //Turned all the way CW
                     //Keep right wheel  on while
                     //lowering the speed of left wheel
-                    OC2RS = abs((1023-adcVal)*2);
-                    OC1RS = 1023;
+                    RIGHTWHEEL = abs((1023-adcVal)*2);
+                    LEFTWHEEL = 1023;
 
                 }
                 else if(adcVal < 500){
                     //Turned all the way CCW
                     //Keep left wheel on while
                     //Lowering the speed of right wheel
-                    OC2RS = 1023;
-                    OC1RS = abs(adcVal*2);
+                    RIGHTWHEEL = 1023;
+                    LEFTWHEEL = abs(adcVal*2);
                  }
                 else{
-                    OC1RS = 1023;
-                    OC2RS = 1023;
+                    LEFTWHEEL = 1023;   //Middle should have both on max
+                    RIGHTWHEEL = 1023;
                 }
                 break;
             default:
@@ -114,17 +108,13 @@ int main(void)
                 break;
         }
     }
-    
-     
-
-        
     return 0;
 }
 // ******************************************************************************************* //
 void _ISR _ADC1Interrupt(void){
 
     IFS0bits.AD1IF = 0;
-    adcVal = ADC1BUF0;
+    adcVal = ADC1BUF0; //Read from one buffer from ADC
     /*
     int i = 0;
     unsigned int *adcPtr;
@@ -135,17 +125,12 @@ void _ISR _ADC1Interrupt(void){
         adcPtr++;
     }
      */
-    
     done = 1;
 }
 // ******************************************************************************************* //
 void _ISR _CNInterrupt(void){
     IFS1bits.CNIF = 0;
-    if(PORTBbits.RB5 == 0){
-      
-    }
-    else if(PORTBbits.RB5 == 1){
-        
+    if(PORTBbits.RB5 == 1){
         curState = nextState;
     }
 
